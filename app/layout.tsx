@@ -50,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           data-website-id="__UMAMI_WEBSITE_ID__"
           data-do-not-track="true"
           data-performance="true"
+          data-exclude-hash="true"
           data-domains="dcs-prep.vercel.app"
           data-tag="DCSPrep"
         />
