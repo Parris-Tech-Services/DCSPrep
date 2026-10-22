@@ -2,6 +2,7 @@ import './globals.css';
 import React from 'react';
 import Topbar from '../src/components/shell/Topbar';
 import PodcastPlayer from '../src/components/PodcastPlayer';
+import Script from "next/script";
 
 export const metadata = {
   title: 'DCSPrep',
@@ -43,6 +44,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </footer>
         </div>
         <PodcastPlayer />
+        <Script
+          src="https://cloud.umami.is/script.js"
+          strategy="afterInteractive"
+          data-website-id="__UMAMI_WEBSITE_ID__"
+          data-do-not-track="true"
+          data-performance="true"
+          data-domains="dcs-prep.vercel.app"
+          data-tag="DCSPrep"
+        />
       </body>
     </html>
   );
