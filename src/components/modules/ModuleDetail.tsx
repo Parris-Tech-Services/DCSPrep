@@ -9,10 +9,16 @@ import FlashcardDeck from '../flashcards/FlashcardDeck';
 import QuizEngine from '../quiz/QuizEngine';
 
 export default function ModuleDetail({ moduleData }: { moduleData: TrainingModule }) {
-  const [progress, setProgress] = useState<UserProgress>(() => getProgress());
-  useEffect(() => { setProgress((p) => ensureModuleProgress(p, moduleData)); }, [moduleData]);
+  // Server and first client render must agree. Browser storage is only read after hydration.
+  const [progress, setProgress] = useState<UserProgress>({ modules: {} });
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setProgress(ensureModuleProgress(getProgress(), moduleData));
+    setLoaded(true);
+  }, [moduleData]);
 
-  useEffect(() => { saveProgress(progress); }, [progress]);
+  // Never overwrite a saved record with the empty server-side initial state.
+  useEffect(() => { if (loaded) saveProgress(progress); }, [loaded, progress]);
 
   const moduleProg = progress.modules[moduleData.id] ?? { sectionsRead: {}, flashcards: {}, quizAttempts: [] };
 
@@ -57,6 +63,8 @@ export default function ModuleDetail({ moduleData }: { moduleData: TrainingModul
 
   const knownCount = Object.values(moduleProg.flashcards || {}).filter((s) => s === 'known').length;
   const totalFlash = moduleData.flashcards.length;
+
+  if (!loaded) return <div role="status" className="p-4 text-slate-600">Loading saved module progress…</div>;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
