@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { modules } from '../data/modules';
+import { allModules as modules } from '../data/allModules';
 import { getProgress } from '../lib/progress';
 import { getModuleCompletion } from '../lib/moduleMath';
 
